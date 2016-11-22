@@ -24,7 +24,7 @@ func main() {
 	})
 
 	server.POST("/tasks", func(c *gin.Context) {
-		newTask := payloads.Task{ID: 1}
+		newTask := payloads.Task{}
 		c.Bind(&newTask)
 
 		// save task
