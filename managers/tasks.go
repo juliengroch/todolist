@@ -10,6 +10,6 @@ import (
 // CreateTasks create a task
 func CreateTasks(ctx context.Context, payload *payloads.Task) (models.Task, error) {
 	var task models.Task
-	task = payloads.Task{ID: 1}
+	task = models.Task{}
 	return task
 }
