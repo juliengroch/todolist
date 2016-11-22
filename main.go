@@ -5,9 +5,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"taskProject/constants"
-	"taskProject/managers"
-	"taskProject/payloads"
+	"github.com/juliengroch/todolist/constants"
+	"github.com/juliengroch/todolist/managers"
+	"github.com/juliengroch/todolist/payloads"
 )
 
 func main() {
