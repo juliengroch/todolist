@@ -1,0 +1,62 @@
+// Placez vos paramètres dans ce fichier pour remplacer les paramètres par défaut et les paramètres utilisateur.
+{
+    // Window
+    "window.zoomLevel": -0.6,
+
+    // Editor
+    "editor.fontFamily": "Ubuntu Mono, Monaco, 'Courier New', monospace",
+    "editor.fontSize": 18,
+    "editor.renderWhitespace": "none",
+    "editor.formatOnSave": true,
+    "editor.folding": false,
+
+    // Project Manager
+    "projectManager.openInNewWindow": false,
+
+    // Go
+    "go.buildOnSave": false,
+    "go.lintOnSave": true,
+    "go.vetOnSave": true,
+    "go.buildFlags": [],
+    "go.lintTool": "gometalinter",
+    "go.lintFlags": [
+        "--disable-all",
+        "--enable=errcheck",
+        "--enable=golint",
+        "--enable=structcheck"
+    ],
+    "go.vetFlags": [],
+    "go.coverOnSave": false,
+    "go.useCodeSnippetsOnFunctionSuggest": true,
+    "go.formatTool": "goimports",
+    "go.gocodeAutoBuild": false,
+    "go.autocompleteUnimportedPackages": true,
+    "go.gopath": "/home/julien/goWork",
+
+    // Python
+    "python.linting.pylintEnabled": false,
+    "python.linting.pep8Enabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--ignore=E501" // line too long
+    ],
+    "python.linting.pep8Args": [
+        "--ignore=E501"
+    ],
+
+    // Files
+    "files.exclude": {
+        "**/*.pyc": true,
+        "**/.git/objects/**": true,
+        "**/node_modules/**": true,
+        "**/__pycache__": true
+    },
+
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/.env": true,
+        "**/.venv": true,
+        "**/__pycache__": true
+    }
+}

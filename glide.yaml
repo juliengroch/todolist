@@ -1,0 +1,6 @@
+package: .
+import:
+- package: github.com/gin-gonic/gin
+  version: bb159f9260a262fccbdbd6f37f8575d1e7e6aaa0
+- package: github.com/jinzhu/gorm
+  version: 066abcef408f2522f0a89952e44ab17eac176ed0
