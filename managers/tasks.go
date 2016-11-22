@@ -9,5 +9,7 @@ import (
 
 // CreateTasks create a task
 func CreateTasks(ctx context.Context, payload *payloads.Task) (models.Task, error) {
-	// TODO ; gorm
+	var task models.Task
+	task = payloads.Task{ID: 1}
+	return task
 }

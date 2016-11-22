@@ -2,24 +2,25 @@ package main
 
 import (
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+
 	"taskProject/constants"
 	"taskProject/managers"
 	"taskProject/payloads"
-
-	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	var server = gin.Default()
 	server.GET("/tasks", func(c *gin.Context) {
-		taskList, isOk := c.Get(constants.TaskListKey)
+		taskList, ok := c.Get(constants.TaskListKey)
 
-		if isOk {
+		if ok {
 			c.JSON(http.StatusOK, taskList)
-
-		} else {
-			c.Status(http.StatusNoContent)
+			return
 		}
+
+		c.Status(http.StatusNoContent)
 	})
 
 	server.POST("/tasks", func(c *gin.Context) {
@@ -27,7 +28,12 @@ func main() {
 		c.Bind(&newTask)
 
 		// save task
-		modeltask, err := managers.CreateTasks(c, &newTask)
+		modelTask, err := managers.CreateTasks(c, &newTask)
+
+		if err != nil {
+			panic(err)
+		}
+
 		c.JSON(http.StatusCreated, modeltask)
 	})
 
