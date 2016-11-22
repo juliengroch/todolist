@@ -34,7 +34,7 @@ func main() {
 			panic(err)
 		}
 
-		c.JSON(http.StatusCreated, modeltask)
+		c.JSON(http.StatusCreated, modelTask)
 	})
 
 	server.Run() // listen and server on 0.0.0.0:8080
