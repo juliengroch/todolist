@@ -1,41 +1,40 @@
 package main
 
 import (
-	"net/http"
+	"os"
 
-	"github.com/gin-gonic/gin"
+	cli "gopkg.in/urfave/cli.v1"
 
-	"github.com/juliengroch/todolist/constants"
-	"github.com/juliengroch/todolist/managers"
-	"github.com/juliengroch/todolist/payloads"
+	"github.com/juliengroch/todolist/application"
+	"github.com/juliengroch/todolist/config"
+	"github.com/juliengroch/todolist/server"
 )
 
 func main() {
-	var server = gin.Default()
-	server.GET("/tasks", func(c *gin.Context) {
-		taskList, ok := c.Get(constants.TaskListKey)
-
-		if ok {
-			c.JSON(http.StatusOK, taskList)
-			return
-		}
-
-		c.Status(http.StatusNoContent)
-	})
-
-	server.POST("/tasks", func(c *gin.Context) {
-		newTask := payloads.Task{}
-		c.Bind(&newTask)
-
-		// save task
-		modelTask, err := managers.CreateTasks(c, &newTask)
+	app := cli.NewApp()
+	app.Name = "todolis"
+	app.Usage = "formation project"
+	app.Action = func(c *cli.Context) error {
+		cfg, err := config.New(c)
 
 		if err != nil {
-			panic(err)
+			return err
 		}
 
-		c.JSON(http.StatusCreated, modelTask)
-	})
+		ctx, err := application.Load(cfg)
 
-	server.Run() // listen and server on 0.0.0.0:8080
+		if err != nil {
+			return err
+		}
+
+		return server.Run(ctx)
+	}
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:  "config, c",
+			Usage: "Load configuration from `FILE`",
+		},
+	}
+
+	app.Run(os.Args)
 }

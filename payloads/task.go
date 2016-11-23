@@ -1,6 +1,6 @@
 package payloads
 
-// Task payload for POST (create)
+// Task payload for POST (create) and  PATCH (update)
 type Task struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`

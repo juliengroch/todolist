@@ -4,9 +4,10 @@ import "time"
 
 // Task model.
 type Task struct {
-	ID          int64
-	Title       string    `sql:"type:varchar(30)"`
-	Description string    `sql:"type:varchar(255)"`
+	ID          string `sql:"type:varchar(255)"`
+	Title       string `sql:"type:varchar(30)"`
+	Description string `sql:"type:varchar(255)"`
+	Priority    int8
 	Created     time.Time `sql:"not null"`
 	Modified    time.Time `sql:"not null"`
 }
@@ -17,6 +18,6 @@ func (Task) TableName() string {
 }
 
 // GetID returns instance ID.
-func (t Task) GetID() int64 {
+func (t Task) GetID() string {
 	return t.ID
 }

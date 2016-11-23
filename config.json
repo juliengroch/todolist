@@ -1,0 +1,8 @@
+{
+    "database": {
+        "name": "todolist",
+        "user": "julien",
+        "password": "ulule",
+        "host": "127.0.0.1"
+    }
+}

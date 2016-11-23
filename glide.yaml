@@ -4,3 +4,14 @@ import:
   version: bb159f9260a262fccbdbd6f37f8575d1e7e6aaa0
 - package: github.com/jinzhu/gorm
   version: 066abcef408f2522f0a89952e44ab17eac176ed0
+- package: github.com/jinzhu/inflection
+- package: github.com/mattn/go-sqlite3
+- package: github.com/lib/pq
+- package: github.com/satori/go.uuid
+  version: ^1.1.0
+- package: github.com/spf13/viper
+- package: github.com/fsnotify/fsnotify
+  version: ^1.4.2
+- package: github.com/ulule/deepcopier
+- package: github.com/guregu/null
+  version: ^3.1.0
