@@ -15,7 +15,7 @@ import (
 )
 
 type store struct {
-	*gorm.DB
+	db *gorm.DB
 }
 
 // Store interface to store
@@ -24,13 +24,19 @@ type Store interface {
 
 	CreateTask(title string, description string, priority int8) (*models.Task, error)
 	GetTaskByID(id string) (*models.Task, error)
-	UpdateTask(id string, title string, description string, priority int8) (*models.Task, error)
+	GetTasks() ([]models.Task, error)
+	Save(out interface{}) error
 }
 
 // GetTaskByID get one task by id
 func (s *store) GetTaskByID(id string) (*models.Task, error) {
 	task := &models.Task{}
-	return task, s.Where("id = ?", id).Find(&task).Error
+	return task, s.db.Where("id = ?", id).Find(&task).Error
+}
+
+func (s *store) GetTasks() ([]models.Task, error) {
+	tasks := []models.Task{}
+	return tasks, s.db.Find(&tasks).Error
 }
 
 // CreateTask make a new task
@@ -44,21 +50,11 @@ func (s *store) CreateTask(title string, description string, priority int8) (*mo
 		Modified:    time.Now(),
 	}
 
-	return task, s.Create(task).Error
+	return task, s.db.Create(task).Error
 }
 
-// UpdateTask update a task by id
-func (s *store) UpdateTask(id string, title string, description string, priority int8) (*models.Task, error) {
-	task, err := s.GetTaskByID(id)
-
-	task.ID = id
-	task.Title = title
-	task.Description = description
-	task.Priority = priority
-
-	err = s.Save(task).Error
-
-	return task, err
+func (s *store) Save(out interface{}) error {
+	return s.db.Save(out).Error
 }
 
 // New init store
@@ -81,7 +77,7 @@ func Migrate(ctx context.Context) error {
 }
 
 func (s *store) Migrate() error {
-	s.AutoMigrate(&models.Task{})
+	s.db.AutoMigrate(&models.Task{})
 
 	return nil
 }

@@ -38,3 +38,5 @@ func main() {
 
 	app.Run(os.Args)
 }
+
+// TODO : format error -> faillure, BIND, Validate -> manager

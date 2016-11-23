@@ -23,3 +23,19 @@ func NewTask(task *models.Task) (*Task, error) {
 
 	return resource, nil
 }
+
+func NewTasks(tasks []models.Task) ([]*Task, error) {
+	resources := []*Task{}
+
+	for _, tm := range tasks {
+		resource, err := NewTask(&tm)
+		if err != nil {
+			return nil, err
+		}
+
+		resources = append(resources, resource)
+	}
+
+	return resources, nil
+
+}

@@ -17,9 +17,12 @@ func Run(ctx context.Context) error {
 	server.Use(middleware.SetStore(store.FromContext(ctx)))
 	server.Use(middleware.SetConfig(config.FromContext(ctx)))
 
-	server.GET("/tasks/:id", views.TaskView)
+	taskResource := views.TaskResource()
+
+	server.GET("/tasks", views.TaskListView)
+	server.GET("/tasks/:id", taskResource, views.TaskDetailView)
 	server.POST("/tasks", views.TaskCreateView)
-	server.PATCH("/tasks/:id", views.TaskUpdateView)
+	server.PATCH("/tasks/:id", taskResource, views.TaskUpdateView)
 
 	server.Run() // listen and server on 0.0.0.0:8080
 

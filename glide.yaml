@@ -15,3 +15,5 @@ import:
 - package: github.com/ulule/deepcopier
 - package: github.com/guregu/null
   version: ^3.1.0
+- package: github.com/asaskevich/govalidator
+  version: ^5.0.0

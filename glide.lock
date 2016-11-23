@@ -1,10 +1,8 @@
-hash: 4577de05def31a2d63132072c96fc3ad02ff7cac5416425859c8db476e737d8e
-updated: 2016-11-23T12:18:56.99107071+01:00
+hash: a4cf538fab5d45ef1adb809e8ed9181062ac01e4b56e5e2c5be2c57310561cde
+updated: 2016-11-23T15:16:13.416404047+01:00
 imports:
-- name: github.com/davecgh/go-spew
-  version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
-  subpackages:
-  - spew
+- name: github.com/asaskevich/govalidator
+  version: 7b3beb6df3c42abd3509abfc3bcacc0fbfb7c877
 - name: github.com/fsnotify/fsnotify
   version: 629574ca2a5df945712d3079857300b5e4da0236
 - name: github.com/gin-gonic/gin
