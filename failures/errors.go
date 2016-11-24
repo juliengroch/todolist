@@ -4,5 +4,5 @@ import "errors"
 
 // Global errors
 var (
-	ErrBadFlagCli = errors.New("Bad argument for start flag")
+	ErrWrongStartCmdCli = errors.New("Wrong command to use the app, use run or migrate")
 )

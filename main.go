@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"os"
 
 	cli "gopkg.in/urfave/cli.v1"
@@ -16,39 +17,66 @@ func main() {
 	app.Name = "todolis"
 	app.Usage = "formation project"
 	app.Action = func(c *cli.Context) error {
-		cfg, err := config.New(c)
-
-		if err != nil {
-			return err
-		}
-
-		ctx, err := application.Load(cfg)
-
-		if err != nil {
-			return err
-		}
-
-		if c.String("start") == "run" {
-			return server.Run(ctx)
-		} else if c.String("start") == "migrate" {
-			return server.Migrate(ctx)
-		}
-
-		return failures.ErrBadFlagCli
+		return failures.ErrWrongStartCmdCli
 	}
-	app.Flags = []cli.Flag{
+
+	cf := []cli.Flag{
 		cli.StringFlag{
 			Name:  "config, c",
 			Usage: "Load configuration from `FILE`",
 		},
-		cli.StringFlag{
-			Name:  "start, s",
-			Value: "run",
-			Usage: "choose between run or migrate. Run start the app and migrate build new tables in the database",
+	}
+
+	app.Commands = []cli.Command{
+		{
+			Name:    "run",
+			Aliases: []string{"r"},
+			Usage:   "Start the app",
+			Flags:   cf,
+			Action: func(c *cli.Context) error {
+				ctx, err := loadAllContext(c)
+
+				if err != nil {
+					return err
+				}
+
+				return server.Run(ctx)
+			},
+		},
+		{
+			Name:    "migrate",
+			Aliases: []string{"m"},
+			Usage:   "Build new tables in the database",
+			Flags:   cf,
+			Action: func(c *cli.Context) error {
+				ctx, err := loadAllContext(c)
+
+				if err != nil {
+					return err
+				}
+
+				return server.Migrate(ctx)
+			},
 		},
 	}
 
 	app.Run(os.Args)
+}
+
+func loadAllContext(c *cli.Context) (context.Context, error) {
+	cfg, err := config.New(c)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ctx, err := application.Load(cfg)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return ctx, err
 }
 
 // TODO : format error -> faillure, BIND, Validate -> manager
