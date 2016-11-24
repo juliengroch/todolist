@@ -24,7 +24,7 @@ type Store interface {
 
 	CreateTask(title string, description string, priority int8) (*models.Task, error)
 	GetTaskByID(id string) (*models.Task, error)
-	GetTasks() ([]models.Task, error)
+	FindTasks() ([]models.Task, error)
 	Save(out interface{}) error
 }
 
@@ -34,7 +34,7 @@ func (s *store) GetTaskByID(id string) (*models.Task, error) {
 	return task, s.db.Where("id = ?", id).Find(&task).Error
 }
 
-func (s *store) GetTasks() ([]models.Task, error) {
+func (s *store) FindTasks() ([]models.Task, error) {
 	tasks := []models.Task{}
 	return tasks, s.db.Find(&tasks).Error
 }

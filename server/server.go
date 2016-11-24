@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 
@@ -11,6 +12,7 @@ import (
 	"github.com/juliengroch/todolist/views"
 )
 
+// Run fonction to start the server
 func Run(ctx context.Context) error {
 	var server = gin.Default()
 
@@ -27,4 +29,10 @@ func Run(ctx context.Context) error {
 	server.Run() // listen and server on 0.0.0.0:8080
 
 	return nil
+}
+
+// Migrate database fonction for CLI
+func Migrate(ctx context.Context) error {
+	fmt.Println("do migrate")
+	return store.Migrate(ctx)
 }

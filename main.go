@@ -7,6 +7,7 @@ import (
 
 	"github.com/juliengroch/todolist/application"
 	"github.com/juliengroch/todolist/config"
+	"github.com/juliengroch/todolist/failures"
 	"github.com/juliengroch/todolist/server"
 )
 
@@ -27,12 +28,23 @@ func main() {
 			return err
 		}
 
-		return server.Run(ctx)
+		if c.String("start") == "run" {
+			return server.Run(ctx)
+		} else if c.String("start") == "migrate" {
+			return server.Migrate(ctx)
+		}
+
+		return failures.ErrBadFlagCli
 	}
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:  "config, c",
 			Usage: "Load configuration from `FILE`",
+		},
+		cli.StringFlag{
+			Name:  "start, s",
+			Value: "run",
+			Usage: "choose between run or migrate. Run start the app and migrate build new tables in the database",
 		},
 	}
 
