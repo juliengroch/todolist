@@ -3,7 +3,10 @@ package views
 import (
 	"net/http"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
+	"github.com/mholt/binding"
+
 	"github.com/juliengroch/todolist/failures"
 	"github.com/juliengroch/todolist/managers"
 	"github.com/juliengroch/todolist/models"
@@ -48,7 +51,12 @@ func TaskDetailView(c *gin.Context) {
 // TaskCreateView create one task
 func TaskCreateView(c *gin.Context) {
 	newTask := &payloads.Task{}
-	c.Bind(newTask)
+
+	errs := binding.Bind(c.Request, newTask)
+	if errs.Len() > 0 {
+		failures.HandleError(c, errs)
+	}
+	spew.Dump(newTask)
 
 	// save task
 	tm, err := managers.CreateTask(c, newTask)
@@ -73,7 +81,11 @@ func TaskUpdateView(c *gin.Context) {
 	task := c.MustGet("task").(*models.Task)
 
 	payload := &payloads.Task{}
-	c.Bind(payload)
+
+	errs := binding.Bind(c.Request, payload)
+	if errs.Len() > 0 {
+		failures.HandleError(c, errs)
+	}
 
 	// save task
 	tm, err := managers.UpdateTask(c, task, payload)

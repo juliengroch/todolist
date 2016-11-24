@@ -78,5 +78,3 @@ func loadAllContext(c *cli.Context) (context.Context, error) {
 
 	return ctx, err
 }
-
-// TODO : format error -> faillure, BIND, Validate -> manager
