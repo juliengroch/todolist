@@ -16,13 +16,13 @@ func TaskListView(c *gin.Context) {
 	taskList, err := managers.FindTasks(c)
 
 	if err != nil {
-		panic(err)
+		failures.HandleError(c, err)
 	}
 
 	tr, err := resources.NewTasks(taskList)
 
 	if err != nil {
-		panic(err)
+		failures.HandleError(c, err)
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -38,7 +38,7 @@ func TaskDetailView(c *gin.Context) {
 	tr, err := resources.NewTask(tm)
 
 	if err != nil {
-		panic(err)
+		failures.HandleError(c, err)
 	}
 
 	c.JSON(http.StatusOK, tr)
@@ -79,13 +79,13 @@ func TaskUpdateView(c *gin.Context) {
 	tm, err := managers.UpdateTask(c, task, payload)
 
 	if err != nil {
-		panic(err)
+		failures.HandleError(c, err)
 	}
 
 	tr, err := resources.NewTask(tm)
 
 	if err != nil {
-		panic(err)
+		failures.HandleError(c, err)
 	}
 
 	c.JSON(http.StatusCreated, tr)
