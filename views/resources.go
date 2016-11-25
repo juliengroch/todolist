@@ -8,11 +8,12 @@ import (
 
 	"github.com/juliengroch/todolist/constants"
 	"github.com/juliengroch/todolist/managers"
+	"github.com/juliengroch/todolist/middleware/environment"
 )
 
 func TaskResource() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tm, err := managers.GetTaskByID(c, c.Param("id"))
+		tm, err := managers.GetTaskByID(c, c.Param("id"), environment.AuthenticatedUser(c).ID)
 
 		if err != nil {
 			if err == gorm.ErrRecordNotFound {

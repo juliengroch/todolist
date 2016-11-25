@@ -3,13 +3,13 @@ package views
 import (
 	"net/http"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 	"github.com/mholt/binding"
 
 	"github.com/juliengroch/todolist/constants"
 	"github.com/juliengroch/todolist/failures"
 	"github.com/juliengroch/todolist/managers"
+	"github.com/juliengroch/todolist/middleware/environment"
 	"github.com/juliengroch/todolist/models"
 	"github.com/juliengroch/todolist/payloads"
 	"github.com/juliengroch/todolist/resources"
@@ -57,9 +57,9 @@ func TaskCreateView(c *gin.Context) {
 	if errs.Len() > 0 {
 		failures.HandleError(c, errs)
 	}
-	spew.Dump(newTask)
 
 	// save task
+	newTask.User = environment.AuthenticatedUser(c)
 	tm, err := managers.CreateTask(c, newTask)
 
 	if err != nil {

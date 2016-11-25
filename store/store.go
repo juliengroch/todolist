@@ -3,21 +3,14 @@ package store
 import (
 	"context"
 	"fmt"
-	"strings"
-	"time"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	uuid "github.com/satori/go.uuid"
 
 	"github.com/juliengroch/todolist/config"
 	"github.com/juliengroch/todolist/loggers"
 	"github.com/juliengroch/todolist/models"
 )
-
-func getLogger() loggers.Logger {
-	return loggers.GetLogger("store.go")
-}
 
 type store struct {
 	db *gorm.DB
@@ -25,39 +18,25 @@ type store struct {
 
 // Store interface to store
 type Store interface {
-	Migrate() error
+	Migrate(ctx context.Context) error
 
-	CreateTask(title string, description string, priority int8) (*models.Task, error)
-	GetTaskByID(id string) (*models.Task, error)
+	GetTaskByID(id string, userID string) (*models.Task, error)
 	FindTasks() ([]models.Task, error)
+	Create(out interface{}) error
 	Save(out interface{}) error
 
 	GetUserByKey(key string) (*models.User, error)
 }
 
 // GetTaskByID get one task by id
-func (s *store) GetTaskByID(id string) (*models.Task, error) {
+func (s *store) GetTaskByID(id string, userID string) (*models.Task, error) {
 	task := &models.Task{}
-	return task, s.db.Where("id = ?", id).Find(&task).Error
+	return task, s.db.Where("id = ? AND user_id = ?", id, userID).Find(&task).Error
 }
 
 func (s *store) FindTasks() ([]models.Task, error) {
 	tasks := []models.Task{}
 	return tasks, s.db.Find(&tasks).Error
-}
-
-// CreateTask make a new task
-func (s *store) CreateTask(title string, description string, priority int8) (*models.Task, error) {
-	task := &models.Task{
-		ID:          strings.Replace(uuid.NewV4().String(), "-", "", -1),
-		Title:       title,
-		Description: description,
-		Priority:    priority,
-		Created:     time.Now(),
-		Modified:    time.Now(),
-	}
-
-	return task, s.db.Create(task).Error
 }
 
 // GetUserByKey get user by username
@@ -68,6 +47,10 @@ func (s *store) GetUserByKey(key string) (*models.User, error) {
 
 func (s *store) Save(out interface{}) error {
 	return s.db.Save(out).Error
+}
+
+func (s *store) Create(out interface{}) error {
+	return s.db.Create(out).Error
 }
 
 // New init store
@@ -86,11 +69,11 @@ func New(cfg config.Database) (*store, error) {
 
 // Migrate migrates the schema
 func Migrate(ctx context.Context) error {
-	return FromContext(ctx).Migrate()
+	return FromContext(ctx).Migrate(ctx)
 }
 
-func (s *store) Migrate() error {
+func (s *store) Migrate(ctx context.Context) error {
 	s.db.AutoMigrate(&models.Task{}, &models.User{})
-	getLogger().Info("Migrate on BDD ok")
+	loggers.FromContext(ctx).Info("Migrate on BDD ok")
 	return nil
 }

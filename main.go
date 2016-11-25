@@ -22,8 +22,9 @@ func main() {
 
 	cf := []cli.Flag{
 		cli.StringFlag{
-			Name:  "config, c",
-			Usage: "Load configuration from `FILE`",
+			Name:   "config, c",
+			Usage:  "Load configuration from `FILE`",
+			EnvVar: "TODOLIST_CONF",
 		},
 	}
 

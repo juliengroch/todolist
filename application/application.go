@@ -4,11 +4,13 @@ import (
 	"context"
 
 	"github.com/juliengroch/todolist/config"
+	"github.com/juliengroch/todolist/loggers"
 	"github.com/juliengroch/todolist/store"
 )
 
 // Load application
 func Load(cfg *config.Config) (context.Context, error) {
+
 	// Empty context
 	ctx := context.Background()
 
@@ -23,6 +25,9 @@ func Load(cfg *config.Config) (context.Context, error) {
 
 	// Add store to context
 	ctx = store.NewContext(ctx, s)
+
+	// Add logger to context
+	ctx = loggers.NewContext(ctx, loggers.New())
 
 	return ctx, nil
 }

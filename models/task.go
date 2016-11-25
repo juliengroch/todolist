@@ -4,10 +4,11 @@ import "time"
 
 // Task model.
 type Task struct {
-	ID          string `sql:"type:varchar(255)"`
-	Title       string `sql:"type:varchar(30)"`
-	Description string `sql:"type:varchar(255)"`
-	Priority    int8
+	ID          string    `sql:"type:varchar(255)"`
+	Title       string    `sql:"type:varchar(30)"`
+	Description string    `sql:"type:varchar(255)"`
+	Priority    int8      `sql:"type:integer"`
+	UserID      string    `sql:"type:varchar(255)"`
 	Created     time.Time `sql:"not null"`
 	Modified    time.Time `sql:"not null"`
 }

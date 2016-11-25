@@ -7,6 +7,7 @@ import (
 
 type Config struct {
 	Database Database
+	Server   Server
 }
 
 type Database struct {
@@ -14,6 +15,10 @@ type Database struct {
 	User     string `json:"user"`
 	Password string `json:"password"`
 	Host     string `json:"host"`
+}
+
+type Server struct {
+	Port int `json:"port"`
 }
 
 // New configuration from file or from cli / env
