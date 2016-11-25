@@ -1,0 +1,1 @@
+This project is a go sample application to learn go language.
