@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mholt/binding"
 
+	"github.com/juliengroch/todolist/constants"
 	"github.com/juliengroch/todolist/failures"
 	"github.com/juliengroch/todolist/managers"
 	"github.com/juliengroch/todolist/models"
@@ -36,7 +37,7 @@ func TaskListView(c *gin.Context) {
 
 // TaskDetailView get one task handler
 func TaskDetailView(c *gin.Context) {
-	tm := c.MustGet("task").(*models.Task)
+	tm := c.MustGet(constants.TaskKey).(*models.Task)
 
 	tr, err := resources.NewTask(tm)
 
@@ -78,7 +79,7 @@ func TaskCreateView(c *gin.Context) {
 
 // TaskUpdateView update one task
 func TaskUpdateView(c *gin.Context) {
-	task := c.MustGet("task").(*models.Task)
+	task := c.MustGet(constants.TaskKey).(*models.Task)
 
 	payload := &payloads.Task{}
 

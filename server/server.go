@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
 
@@ -20,19 +19,14 @@ func Run(ctx context.Context) error {
 	server.Use(middleware.SetConfig(config.FromContext(ctx)))
 
 	taskResource := views.TaskResource()
+	auth := middleware.Authentication()
 
-	server.GET("/tasks", views.TaskListView)
-	server.GET("/tasks/:id", taskResource, views.TaskDetailView)
-	server.POST("/tasks", views.TaskCreateView)
-	server.PATCH("/tasks/:id", taskResource, views.TaskUpdateView)
+	server.GET("/tasks", auth, views.TaskListView)
+	server.GET("/tasks/:id", auth, taskResource, views.TaskDetailView)
+	server.POST("/tasks", auth, views.TaskCreateView)
+	server.PATCH("/tasks/:id", auth, taskResource, views.TaskUpdateView)
 
-	server.Run() // listen and server on 0.0.0.0:8080
+	server.Run()
 
 	return nil
-}
-
-// Migrate database fonction for CLI
-func Migrate(ctx context.Context) error {
-	fmt.Println("do migrate")
-	return store.Migrate(ctx)
 }

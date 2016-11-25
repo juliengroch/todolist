@@ -6,13 +6,18 @@ import (
 	"strings"
 	"time"
 
-	_ "github.com/jinzhu/gorm/dialects/postgres"
-
 	"github.com/jinzhu/gorm"
-	"github.com/juliengroch/todolist/config"
-	"github.com/juliengroch/todolist/models"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	uuid "github.com/satori/go.uuid"
+
+	"github.com/juliengroch/todolist/config"
+	"github.com/juliengroch/todolist/loggers"
+	"github.com/juliengroch/todolist/models"
 )
+
+func getLogger() loggers.Logger {
+	return loggers.GetLogger("store.go")
+}
 
 type store struct {
 	db *gorm.DB
@@ -26,6 +31,8 @@ type Store interface {
 	GetTaskByID(id string) (*models.Task, error)
 	FindTasks() ([]models.Task, error)
 	Save(out interface{}) error
+
+	GetUserByKey(key string) (*models.User, error)
 }
 
 // GetTaskByID get one task by id
@@ -53,6 +60,12 @@ func (s *store) CreateTask(title string, description string, priority int8) (*mo
 	return task, s.db.Create(task).Error
 }
 
+// GetUserByKey get user by username
+func (s *store) GetUserByKey(key string) (*models.User, error) {
+	user := &models.User{}
+	return user, s.db.Where("api_key = ?", key).Find(&user).Error
+}
+
 func (s *store) Save(out interface{}) error {
 	return s.db.Save(out).Error
 }
@@ -77,7 +90,7 @@ func Migrate(ctx context.Context) error {
 }
 
 func (s *store) Migrate() error {
-	s.db.AutoMigrate(&models.Task{})
-
+	s.db.AutoMigrate(&models.Task{}, &models.User{})
+	getLogger().Info("Migrate on BDD ok")
 	return nil
 }

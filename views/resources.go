@@ -5,6 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+
+	"github.com/juliengroch/todolist/constants"
 	"github.com/juliengroch/todolist/managers"
 )
 
@@ -18,7 +20,7 @@ func TaskResource() gin.HandlerFunc {
 			}
 		}
 
-		c.Set("task", tm)
+		c.Set(constants.TaskKey, tm)
 
 		c.Next()
 	}

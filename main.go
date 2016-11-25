@@ -55,7 +55,7 @@ func main() {
 					return err
 				}
 
-				return server.Migrate(ctx)
+				return application.Migrate(ctx)
 			},
 		},
 	}

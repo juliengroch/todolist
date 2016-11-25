@@ -7,6 +7,7 @@ import (
 	"github.com/juliengroch/todolist/store"
 )
 
+// Load application
 func Load(cfg *config.Config) (context.Context, error) {
 	// Empty context
 	ctx := context.Background()
@@ -24,4 +25,9 @@ func Load(cfg *config.Config) (context.Context, error) {
 	ctx = store.NewContext(ctx, s)
 
 	return ctx, nil
+}
+
+// Migrate database fonction for CLI
+func Migrate(ctx context.Context) error {
+	return store.Migrate(ctx)
 }
