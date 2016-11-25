@@ -11,6 +11,7 @@ type Task struct {
 	UserID      string    `sql:"type:varchar(255)"`
 	Created     time.Time `sql:"not null"`
 	Modified    time.Time `sql:"not null"`
+	User        User
 }
 
 // TableName returns the table name.

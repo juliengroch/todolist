@@ -18,8 +18,8 @@ func GetTaskByID(ctx context.Context, id string, userID string) (*models.Task, e
 }
 
 // FindTasks get all task
-func FindTasks(ctx context.Context) ([]models.Task, error) {
-	return store.FromContext(ctx).FindTasks()
+func FindTasks(ctx context.Context, userID string) ([]models.Task, error) {
+	return store.FromContext(ctx).FindTasks(userID)
 }
 
 // CreateTask create a task

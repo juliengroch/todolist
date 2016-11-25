@@ -21,7 +21,7 @@ type Store interface {
 	Migrate(ctx context.Context) error
 
 	GetTaskByID(id string, userID string) (*models.Task, error)
-	FindTasks() ([]models.Task, error)
+	FindTasks(userID string) ([]models.Task, error)
 	Create(out interface{}) error
 	Save(out interface{}) error
 
@@ -31,12 +31,12 @@ type Store interface {
 // GetTaskByID get one task by id
 func (s *store) GetTaskByID(id string, userID string) (*models.Task, error) {
 	task := &models.Task{}
-	return task, s.db.Where("id = ? AND user_id = ?", id, userID).Find(&task).Error
+	return task, s.db.Preload("User").Where("id = ? AND user_id = ?", id, userID).Find(&task).Error
 }
 
-func (s *store) FindTasks() ([]models.Task, error) {
+func (s *store) FindTasks(userID string) ([]models.Task, error) {
 	tasks := []models.Task{}
-	return tasks, s.db.Find(&tasks).Error
+	return tasks, s.db.Preload("User").Where("user_id = ?", userID).Find(&tasks).Error
 }
 
 // GetUserByKey get user by username

@@ -17,7 +17,7 @@ import (
 
 // TaskListView get all tasks handler
 func TaskListView(c *gin.Context) {
-	taskList, err := managers.FindTasks(c)
+	taskList, err := managers.FindTasks(c, environment.AuthenticatedUser(c).ID)
 
 	if err != nil {
 		failures.HandleError(c, err)
