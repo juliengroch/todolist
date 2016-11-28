@@ -26,6 +26,7 @@ type Store interface {
 
 	// store comments
 	GetCommentByID(id string, userID string) (*models.Comment, error)
+	FindComments(userID string) ([]models.Comment, error)
 
 	// main method
 	Create(out interface{}) error
@@ -39,6 +40,12 @@ type Store interface {
 func (s *store) GetTaskByID(id string, userID string) (*models.Task, error) {
 	task := &models.Task{}
 	return task, s.db.Preload("User").Preload("Comments").Preload("Comments.User").Where("id = ? AND user_id = ?", id, userID).Find(task).Error
+}
+
+// FindComments find all taks for one user
+func (s *store) FindComments(userID string) ([]models.Comment, error) {
+	comments := []models.Comment{}
+	return comments, s.db.Preload("User").Where("user_id = ?", userID).Find(&comments).Error
 }
 
 // FindTasks find all taks for one user

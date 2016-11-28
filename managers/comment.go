@@ -17,6 +17,11 @@ func GetCommentByID(ctx context.Context, id string, userID string) (*models.Comm
 	return store.FromContext(ctx).GetCommentByID(id, userID)
 }
 
+// FindComments get all tasks
+func FindComments(ctx context.Context, userID string) ([]models.Comment, error) {
+	return store.FromContext(ctx).FindComments(userID)
+}
+
 // CreateComment create a Comment
 func CreateComment(ctx context.Context, payload *payloads.Comment) (*models.Comment, error) {
 	comment := &models.Comment{

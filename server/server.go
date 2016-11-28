@@ -34,6 +34,7 @@ func Run(ctx context.Context) error {
 
 	// comment api
 	server.GET("/comments/:id", auth, commentResource, views.CommentView)
+	server.GET("/users/:id/comments", auth, views.UserCommentListView)
 	server.POST("/tasks/:id/comments", auth, views.CommentCreateView)
 	server.PATCH("/comments/:id", auth, commentResource, views.CommentUpdateView)
 

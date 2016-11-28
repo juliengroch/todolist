@@ -29,6 +29,26 @@ func CommentView(c *gin.Context) {
 	return
 }
 
+// CommentView get one Comment handler
+func UserCommentListView(c *gin.Context) {
+	commentList, err := managers.FindComments(c, environment.AuthenticatedUser(c).ID)
+
+	if err != nil {
+		failures.HandleError(c, err)
+	}
+
+	clr, err := resources.NewComments(commentList)
+
+	if err != nil {
+		failures.HandleError(c, err)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"comments": clr,
+	})
+	return
+}
+
 // CommentCreateView create one Comment
 func CommentCreateView(c *gin.Context) {
 	newComment := &payloads.Comment{}
