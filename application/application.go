@@ -5,6 +5,7 @@ import (
 
 	"github.com/juliengroch/todolist/config"
 	"github.com/juliengroch/todolist/loggers"
+	"github.com/juliengroch/todolist/sanitizing"
 	"github.com/juliengroch/todolist/store"
 )
 
@@ -29,6 +30,8 @@ func Load(cfg *config.Config) (context.Context, error) {
 	// Add logger to context
 	ctx = loggers.NewContext(ctx, loggers.New())
 
+	// Add sanitizer to context
+	ctx = sanitizing.NewContext(ctx, sanitizing.NewBluemonday())
 	return ctx, nil
 }
 

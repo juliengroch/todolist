@@ -9,6 +9,7 @@ import (
 
 	"github.com/juliengroch/todolist/models"
 	"github.com/juliengroch/todolist/payloads"
+	"github.com/juliengroch/todolist/sanitizing"
 	"github.com/juliengroch/todolist/store"
 )
 
@@ -24,9 +25,11 @@ func FindComments(ctx context.Context, userID string) ([]models.Comment, error) 
 
 // CreateComment create a Comment
 func CreateComment(ctx context.Context, payload *payloads.Comment) (*models.Comment, error) {
+	sanitizer := sanitizing.FromContext(ctx)
+
 	comment := &models.Comment{
 		ID:       strings.Replace(uuid.NewV4().String(), "-", "", -1),
-		Message:  payload.Message,
+		Message:  sanitizer.Sanitize(payload.Message),
 		UserID:   payload.User.ID,
 		TaskID:   payload.TaskID,
 		Created:  time.Now(),

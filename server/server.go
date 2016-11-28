@@ -8,7 +8,9 @@ import (
 	"fmt"
 
 	"github.com/juliengroch/todolist/config"
+	"github.com/juliengroch/todolist/loggers"
 	"github.com/juliengroch/todolist/middleware"
+	"github.com/juliengroch/todolist/sanitizing"
 	"github.com/juliengroch/todolist/store"
 	"github.com/juliengroch/todolist/views"
 )
@@ -19,8 +21,14 @@ func Run(ctx context.Context) error {
 
 	cfg := config.FromContext(ctx)
 
-	server.Use(middleware.SetStore(store.FromContext(ctx)))
-	server.Use(middleware.SetConfig(cfg))
+	appContext := &middleware.ApplicationContextOptions{
+		Config:    cfg,
+		Store:     store.FromContext(ctx),
+		Logger:    loggers.FromContext(ctx),
+		Sanitizer: sanitizing.FromContext(ctx),
+	}
+
+	server.Use(middleware.ApplicationContext(appContext))
 
 	taskResource := views.TaskResource()
 	commentResource := views.CommentResource()

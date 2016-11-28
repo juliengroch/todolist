@@ -1,12 +1,8 @@
-hash: c147a96a76b273d2426f1def0b2e6a2800cdc01a1d6e0211ca078d89e07beb4f
-updated: 2016-11-24T11:07:30.899404842+01:00
+hash: dcde9d1f06bab2eaee710418ff1a38fc14d6b1d5b927a5de1d2c5d9fa75c6580
+updated: 2016-11-28T15:07:05.959435047+01:00
 imports:
 - name: github.com/asaskevich/govalidator
   version: 7b3beb6df3c42abd3509abfc3bcacc0fbfb7c877
-- name: github.com/davecgh/go-spew
-  version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
-  subpackages:
-  - spew
 - name: github.com/fsnotify/fsnotify
   version: 629574ca2a5df945712d3079857300b5e4da0236
 - name: github.com/gin-gonic/gin
@@ -43,13 +39,15 @@ imports:
   - hstore
   - oid
 - name: github.com/magiconair/properties
-  version: 0723e352fa358f9322c938cc2dadda874e9151a9
+  version: 9c47895dc1ce54302908ab8a43385d1f5df2c11c
 - name: github.com/manucorporat/sse
   version: ee05b128a739a0fb76c7ebd3ae4810c1de808d6d
 - name: github.com/mattn/go-sqlite3
   version: fba66eb11643069e747022997e9be3b502b2c6fb
 - name: github.com/mholt/binding
   version: 89411c4ffb61f0ebef45d8bdb830103b358ef9fa
+- name: github.com/microcosm-cc/bluemonday
+  version: f77f16ffc87a6a58814e64ae72d55f9c41374e6d
 - name: github.com/mitchellh/mapstructure
   version: f3009df150dadf309fdee4a54ed65c124afad715
 - name: github.com/oleiade/reflections

@@ -18,3 +18,4 @@ import:
 - package: github.com/asaskevich/govalidator
   version: ^5.0.0
 - package: github.com/mholt/binding
+- package: github.com/microcosm-cc/bluemonday

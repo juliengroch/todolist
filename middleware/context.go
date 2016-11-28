@@ -3,27 +3,27 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/juliengroch/todolist/config"
+	"github.com/juliengroch/todolist/loggers"
+	"github.com/juliengroch/todolist/sanitizing"
 	"github.com/juliengroch/todolist/store"
 )
 
-func SetConfig(cfg config.Config) gin.HandlerFunc {
+// ApplicationContextOptions are application options.
+type ApplicationContextOptions struct {
+	Config    config.Config
+	Store     store.Store
+	Logger    loggers.Logger
+	Sanitizer sanitizing.Sanitizer
+}
+
+// ApplicationContext initialize the application context.
+func ApplicationContext(opts *ApplicationContextOptions) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		config.ToContext(c, cfg)
+		config.ToContext(c, opts.Config)
+		store.ToContext(c, opts.Store)
+		loggers.ToContext(c, opts.Logger)
+		sanitizing.ToContext(c, opts.Sanitizer)
+
 		c.Next()
 	}
-}
-
-func Config(c *gin.Context) config.Config {
-	return c.MustGet("config").(config.Config)
-}
-
-func SetStore(b store.Store) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		store.ToContext(c, b)
-		c.Next()
-	}
-}
-
-func Store(c *gin.Context) store.Store {
-	return c.MustGet("store").(store.Store)
 }

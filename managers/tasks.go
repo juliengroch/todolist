@@ -9,6 +9,7 @@ import (
 
 	"github.com/juliengroch/todolist/models"
 	"github.com/juliengroch/todolist/payloads"
+	"github.com/juliengroch/todolist/sanitizing"
 	"github.com/juliengroch/todolist/store"
 )
 
@@ -24,10 +25,12 @@ func FindTasks(ctx context.Context, userID string) ([]models.Task, error) {
 
 // CreateTask create a task
 func CreateTask(ctx context.Context, payload *payloads.Task) (*models.Task, error) {
+	sanitizer := sanitizing.FromContext(ctx)
+
 	task := &models.Task{
 		ID:          strings.Replace(uuid.NewV4().String(), "-", "", -1),
-		Title:       payload.Title,
-		Description: payload.Description,
+		Title:       sanitizer.Sanitize(payload.Title),
+		Description: sanitizer.Sanitize(payload.Description),
 		Priority:    payload.Priority,
 		UserID:      payload.User.ID,
 		Created:     time.Now(),
