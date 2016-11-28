@@ -38,6 +38,8 @@ func CommentCreateView(c *gin.Context) {
 		failures.HandleError(c, errs)
 	}
 
+	newComment.TaskID = c.Param("id")
+
 	// save Comment
 	newComment.User = environment.AuthenticatedUser(c)
 	tm, err := managers.CreateComment(c, newComment)
@@ -61,7 +63,7 @@ func CommentCreateView(c *gin.Context) {
 func CommentUpdateView(c *gin.Context) {
 	comment := c.MustGet(constants.CommentKey).(*models.Comment)
 
-	payload := &payloads.CommentUp{}
+	payload := &payloads.Comment{}
 
 	errs := binding.Bind(c.Request, payload)
 	if errs.Len() > 0 {

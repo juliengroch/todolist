@@ -2,6 +2,7 @@ package payloads
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/mholt/binding"
@@ -11,6 +12,23 @@ import (
 
 func init() {
 	govalidator.SetFieldsRequiredByDefault(true)
+}
+
+// Validate payload
+func Validate(req *http.Request, errs binding.Errors, data interface{}) binding.Errors {
+	var errFields []string
+
+	if len(errFields) > 0 {
+		for _, err := range errFields {
+			errs = append(errs, binding.Error{
+				FieldNames:     []string{err},
+				Classification: "InvalidValueError",
+				Message:        "Invalid field",
+			})
+		}
+	}
+
+	return ValidateBinding(errs, data)
 }
 
 // ValidateBinding payload with Binding

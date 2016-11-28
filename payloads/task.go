@@ -20,19 +20,7 @@ func (t *Task) FieldMap(req *http.Request) binding.FieldMap {
 	return binding.FieldMap{}
 }
 
-// Validate payload
+// Validate Task payload
 func (t *Task) Validate(req *http.Request, errs binding.Errors) binding.Errors {
-	var errFields []string
-
-	if len(errFields) > 0 {
-		for _, err := range errFields {
-			errs = append(errs, binding.Error{
-				FieldNames:     []string{err},
-				Classification: "InvalidValueError",
-				Message:        "Invalid field",
-			})
-		}
-	}
-
-	return ValidateBinding(errs, t)
+	return Validate(req, errs, t)
 }

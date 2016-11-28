@@ -34,7 +34,7 @@ func Run(ctx context.Context) error {
 
 	// comment api
 	server.GET("/comments/:id", auth, commentResource, views.CommentView)
-	server.POST("/comments", auth, views.CommentCreateView)
+	server.POST("/tasks/:id/comments", auth, views.CommentCreateView)
 	server.PATCH("/comments/:id", auth, commentResource, views.CommentUpdateView)
 
 	server.Run(fmt.Sprintf(":%d", cfg.Server.Port))

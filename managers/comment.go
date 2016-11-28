@@ -40,7 +40,7 @@ func CreateComment(ctx context.Context, payload *payloads.Comment) (*models.Comm
 }
 
 // UpdateComment update a Comment
-func UpdateComment(ctx context.Context, comment *models.Comment, payload *payloads.CommentUp) (*models.Comment, error) {
+func UpdateComment(ctx context.Context, comment *models.Comment, payload *payloads.Comment) (*models.Comment, error) {
 
 	comment.Message = payload.Message
 	comment.Modified = time.Now()
