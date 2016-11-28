@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-// Task model.
+// Task model
 type Task struct {
 	ID          string    `sql:"type:varchar(255)"`
 	Title       string    `sql:"type:varchar(30)"`
@@ -12,6 +12,7 @@ type Task struct {
 	Created     time.Time `sql:"not null"`
 	Modified    time.Time `sql:"not null"`
 	User        User
+	Comments    []Comment
 }
 
 // TableName returns the table name.

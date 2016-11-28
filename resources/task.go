@@ -7,23 +7,34 @@ import (
 
 // Task resource
 type Task struct {
-	ID          string `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Priority    int8   `json:"priority"`
-	User        *User  `json:"user"`
+	ID          string     `json:"id"`
+	Title       string     `json:"title"`
+	Description string     `json:"description"`
+	Priority    int8       `json:"priority"`
+	User        *User      `json:"user"`
+	Comments    []*Comment `json:"comments"`
 }
 
 // NewTask return Task resource from a Task model instance.
 func NewTask(task *models.Task) (*Task, error) {
 	resource := &Task{}
+	var err error
 
-	if err := deepcopier.Copy(task).To(resource); err != nil {
+	err = deepcopier.Copy(task).To(resource)
+
+	if err != nil {
 		return nil, err
 	}
 
-	var err error
+	// map with user
 	resource.User, err = NewUser(&task.User)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// map with Comments
+	resource.Comments, err = NewComments(task.Comments)
 
 	if err != nil {
 		return nil, err

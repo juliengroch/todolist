@@ -7,7 +7,8 @@ const (
 	AuthAPIKeyKey = "auth.api_key"
 
 	// task
-	TaskKey = "task"
+	TaskKey    = "task"
+	CommentKey = "comment"
 )
 
 // Errors

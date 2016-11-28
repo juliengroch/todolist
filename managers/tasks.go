@@ -17,7 +17,7 @@ func GetTaskByID(ctx context.Context, id string, userID string) (*models.Task, e
 	return store.FromContext(ctx).GetTaskByID(id, userID)
 }
 
-// FindTasks get all task
+// FindTasks get all tasks
 func FindTasks(ctx context.Context, userID string) ([]models.Task, error) {
 	return store.FromContext(ctx).FindTasks(userID)
 }
@@ -45,6 +45,7 @@ func UpdateTask(ctx context.Context, task *models.Task, payload *payloads.Task) 
 	task.Title = payload.Title
 	task.Description = payload.Description
 	task.Priority = payload.Priority
+	task.Modified = time.Now()
 
 	return task, store.FromContext(ctx).Save(task)
 }

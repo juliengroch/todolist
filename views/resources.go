@@ -26,3 +26,19 @@ func TaskResource() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func CommentResource() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		tm, err := managers.GetCommentByID(c, c.Param("id"), environment.AuthenticatedUser(c).ID)
+
+		if err != nil {
+			if err == gorm.ErrRecordNotFound {
+				c.AbortWithStatus(http.StatusNotFound)
+			}
+		}
+
+		c.Set(constants.CommentKey, tm)
+
+		c.Next()
+	}
+}

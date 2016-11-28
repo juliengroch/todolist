@@ -20,23 +20,36 @@ type store struct {
 type Store interface {
 	Migrate(ctx context.Context) error
 
+	// store tasks
 	GetTaskByID(id string, userID string) (*models.Task, error)
 	FindTasks(userID string) ([]models.Task, error)
+
+	// store comments
+	GetCommentByID(id string, userID string) (*models.Comment, error)
+
+	// main method
 	Create(out interface{}) error
 	Save(out interface{}) error
 
+	// store user
 	GetUserByKey(key string) (*models.User, error)
 }
 
 // GetTaskByID get one task by id
 func (s *store) GetTaskByID(id string, userID string) (*models.Task, error) {
 	task := &models.Task{}
-	return task, s.db.Preload("User").Where("id = ? AND user_id = ?", id, userID).Find(&task).Error
+	return task, s.db.Preload("User").Preload("Comments").Preload("Comments.User").Where("id = ? AND user_id = ?", id, userID).Find(task).Error
 }
 
+// FindTasks find all taks for one user
 func (s *store) FindTasks(userID string) ([]models.Task, error) {
 	tasks := []models.Task{}
-	return tasks, s.db.Preload("User").Where("user_id = ?", userID).Find(&tasks).Error
+	return tasks, s.db.Preload("User").Preload("Comments").Preload("Comments.User").Where("user_id = ?", userID).Find(&tasks).Error
+}
+
+func (s *store) GetCommentByID(id string, userID string) (*models.Comment, error) {
+	comment := &models.Comment{}
+	return comment, s.db.Preload("User").Where("id = ? AND user_id = ?", id, userID).Find(comment).Error
 }
 
 // GetUserByKey get user by username
@@ -73,7 +86,7 @@ func Migrate(ctx context.Context) error {
 }
 
 func (s *store) Migrate(ctx context.Context) error {
-	s.db.AutoMigrate(&models.Task{}, &models.User{})
+	s.db.AutoMigrate(&models.Task{}, &models.User{}, &models.Comment{})
 	loggers.FromContext(ctx).Info("Migrate on BDD ok")
 	return nil
 }

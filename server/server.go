@@ -23,12 +23,19 @@ func Run(ctx context.Context) error {
 	server.Use(middleware.SetConfig(cfg))
 
 	taskResource := views.TaskResource()
+	commentResource := views.CommentResource()
 	auth := middleware.Authentication()
 
+	// task api
 	server.GET("/tasks", auth, views.TaskListView)
 	server.GET("/tasks/:id", auth, taskResource, views.TaskDetailView)
 	server.POST("/tasks", auth, views.TaskCreateView)
 	server.PATCH("/tasks/:id", auth, taskResource, views.TaskUpdateView)
+
+	// comment api
+	server.GET("/comments/:id", auth, commentResource, views.CommentView)
+	server.POST("/comments", auth, views.CommentCreateView)
+	server.PATCH("/comments/:id", auth, commentResource, views.CommentUpdateView)
 
 	server.Run(fmt.Sprintf(":%d", cfg.Server.Port))
 
