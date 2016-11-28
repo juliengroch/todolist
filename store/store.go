@@ -49,7 +49,14 @@ func (s *store) FindTasks(userID string) ([]models.Task, error) {
 
 func (s *store) GetCommentByID(id string, userID string) (*models.Comment, error) {
 	comment := &models.Comment{}
-	return comment, s.db.Preload("User").Where("id = ? AND user_id = ?", id, userID).Find(comment).Error
+
+	// user can is the task creator or comment createur
+	// SELECT *
+	// FROM Comment c
+	// LEFT JOIN Task t ON c.task_id = t.id
+	// WHERE c.user_id = ? OR t.user_id = ?
+
+	return comment, s.db.Preload("User").Joins("LEFT JOIN task ON comment.task_id = task.id").Where("comment.id = ? AND (comment.user_id = ? OR task.user_id = ?)", id, userID, userID).Find(comment).Error
 }
 
 // GetUserByKey get user by username
