@@ -1,5 +1,5 @@
-hash: dcde9d1f06bab2eaee710418ff1a38fc14d6b1d5b927a5de1d2c5d9fa75c6580
-updated: 2016-11-28T15:07:05.959435047+01:00
+hash: fa3d1fab86dad47e127168cc9c24584a4d16c45a011fea3579904cd0dc239e3b
+updated: 2016-11-29T09:59:41.668681004+01:00
 imports:
 - name: github.com/asaskevich/govalidator
   version: 7b3beb6df3c42abd3509abfc3bcacc0fbfb7c877
@@ -70,12 +70,16 @@ imports:
   version: 5ccb023bc27df288a957c5e994cd44fd19619465
 - name: github.com/spf13/viper
   version: 651d9d916abc3c3d6a91a12549495caba5edffd2
+- name: github.com/stretchr/testify
+  version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
 - name: github.com/ulule/deepcopier
   version: 5b81d57cd17133a7a0cf9d59720f45551cda7491
 - name: golang.org/x/net
   version: f315505cf3349909cdf013ea56690da34e96a451
   subpackages:
   - context
+  - html
+  - html/atom
 - name: golang.org/x/sys
   version: 30237cf4eefd639b184d1f2cb77a581ea0be8947
   subpackages:
@@ -91,4 +95,8 @@ imports:
   version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
 - name: gopkg.in/yaml.v2
   version: a5b47d31c556af34a302ce5d659e6fea44d90de0
-testImports: []
+testImports:
+- name: github.com/davecgh/go-spew
+  version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
+  subpackages:
+  - spew

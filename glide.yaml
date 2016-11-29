@@ -19,3 +19,5 @@ import:
   version: ^5.0.0
 - package: github.com/mholt/binding
 - package: github.com/microcosm-cc/bluemonday
+- package: github.com/stretchr/testify
+  version: ^1.1.4
