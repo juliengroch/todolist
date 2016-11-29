@@ -2,10 +2,9 @@ package server
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
-
-	"fmt"
 
 	"github.com/juliengroch/todolist/config"
 	"github.com/juliengroch/todolist/loggers"
@@ -17,36 +16,27 @@ import (
 
 // Run fonction to start the server
 func Run(ctx context.Context) error {
-	var server = gin.Default()
+	router := Router(ctx)
 
-	cfg := config.FromContext(ctx)
+	views.Routes(router)
+
+	router.Run(fmt.Sprintf(":%d", config.FromContext(ctx).Server.Port))
+
+	return nil
+}
+
+// Router init a gin router with ctx
+func Router(ctx context.Context) *gin.Engine {
+	router := gin.Default()
 
 	appContext := &middleware.ApplicationContextOptions{
-		Config:    cfg,
+		Config:    config.FromContext(ctx),
 		Store:     store.FromContext(ctx),
 		Logger:    loggers.FromContext(ctx),
 		Sanitizer: sanitizing.FromContext(ctx),
 	}
 
-	server.Use(middleware.ApplicationContext(appContext))
+	router.Use(middleware.ApplicationContext(appContext))
 
-	taskResource := views.TaskResource()
-	commentResource := views.CommentResource()
-	auth := middleware.Authentication()
-
-	// task api
-	server.GET("/tasks", auth, views.TaskListView)
-	server.GET("/tasks/:id", auth, taskResource, views.TaskDetailView)
-	server.POST("/tasks", auth, views.TaskCreateView)
-	server.PATCH("/tasks/:id", auth, taskResource, views.TaskUpdateView)
-
-	// comment api
-	server.GET("/comments/:id", auth, commentResource, views.CommentView)
-	server.GET("/users/:id/comments", auth, views.UserCommentListView)
-	server.POST("/tasks/:id/comments", auth, views.CommentCreateView)
-	server.PATCH("/comments/:id", auth, commentResource, views.CommentUpdateView)
-
-	server.Run(fmt.Sprintf(":%d", cfg.Server.Port))
-
-	return nil
+	return router
 }

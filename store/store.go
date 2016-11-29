@@ -19,6 +19,8 @@ type store struct {
 // Store interface to store
 type Store interface {
 	Migrate(ctx context.Context) error
+	ResetDB(ctx context.Context) error
+	Close(ctx context.Context) error
 
 	// store tasks
 	GetTaskByID(id string, userID string) (*models.Task, error)
@@ -39,7 +41,10 @@ type Store interface {
 // GetTaskByID get one task by id
 func (s *store) GetTaskByID(id string, userID string) (*models.Task, error) {
 	task := &models.Task{}
-	return task, s.db.Preload("User").Preload("Comments").Preload("Comments.User").Where("id = ? AND user_id = ?", id, userID).Find(task).Error
+	return task, s.db.
+		Preload("User").Preload("Comments").Preload("Comments.User").
+		Where("id = ? AND user_id = ?", id, userID).
+		Find(task).Error
 }
 
 // FindComments find all taks for one user
@@ -51,7 +56,10 @@ func (s *store) FindComments(userID string) ([]models.Comment, error) {
 // FindTasks find all taks for one user
 func (s *store) FindTasks(userID string) ([]models.Task, error) {
 	tasks := []models.Task{}
-	return tasks, s.db.Preload("User").Preload("Comments").Preload("Comments.User").Where("user_id = ?", userID).Find(&tasks).Error
+	return tasks, s.db.
+		Preload("User").Preload("Comments").Preload("Comments.User").
+		Where("user_id = ?", userID).
+		Find(&tasks).Error
 }
 
 func (s *store) GetCommentByID(id string, userID string) (*models.Comment, error) {
@@ -63,13 +71,17 @@ func (s *store) GetCommentByID(id string, userID string) (*models.Comment, error
 	// LEFT JOIN Task t ON c.task_id = t.id
 	// WHERE c.user_id = ? OR t.user_id = ?
 
-	return comment, s.db.Preload("User").Joins("LEFT JOIN task ON comment.task_id = task.id").Where("comment.id = ? AND (comment.user_id = ? OR task.user_id = ?)", id, userID, userID).Find(comment).Error
+	return comment, s.db.
+		Preload("User").
+		Joins("LEFT JOIN task ON comment.task_id = task.id").
+		Where("comment.id = ? AND (comment.user_id = ? OR task.user_id = ?)", id, userID, userID).
+		Find(comment).Error
 }
 
 // GetUserByKey get user by username
 func (s *store) GetUserByKey(key string) (*models.User, error) {
 	user := &models.User{}
-	return user, s.db.Where("api_key = ?", key).Find(&user).Error
+	return user, s.db.Where("api_key = ?", key).First(user).Error
 }
 
 func (s *store) Save(out interface{}) error {
@@ -92,6 +104,18 @@ func New(cfg config.Database) (*store, error) {
 	}
 
 	return &store{db}, err
+}
+
+// Close connection
+func (s *store) Close(ctx context.Context) error {
+	loggers.FromContext(ctx).Info("Close BDD connection")
+	return s.db.Close()
+}
+
+// ResetDB drop all tables
+func (s *store) ResetDB(ctx context.Context) error {
+	loggers.FromContext(ctx).Info("All tables from bdd have been droped")
+	return s.db.DropTable(&models.Task{}, &models.User{}, &models.Comment{}).Error
 }
 
 // Migrate migrates the schema
