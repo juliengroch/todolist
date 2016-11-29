@@ -1,6 +1,7 @@
 package views
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -16,7 +17,7 @@ import (
 )
 
 func TestTaskDetailViewAuthOK(t *testing.T) {
-	tests.Runner(t, func(router *gin.Engine) {
+	tests.Runner(t, func(router *gin.Engine, ctx context.Context) {
 		resp := tests.GET(router, &tests.Request{
 			URI: fmt.Sprintf("/tasks/%s", fixtures.TaskTestID),
 			Auth: &tests.Auth{
@@ -42,7 +43,7 @@ func TestTaskDetailViewAuthOK(t *testing.T) {
 }
 
 func TestTaskDetailViewAuthNOK(t *testing.T) {
-	tests.Runner(t, func(router *gin.Engine) {
+	tests.Runner(t, func(router *gin.Engine, ctx context.Context) {
 		resp := tests.GET(router, &tests.Request{
 			URI: fmt.Sprintf("/tasks/%s", fixtures.TaskTestID),
 			Auth: &tests.Auth{

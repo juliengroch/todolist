@@ -2,7 +2,9 @@ package tests
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -11,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"fmt"
+	"os"
 
 	"github.com/juliengroch/todolist/application"
 	"github.com/juliengroch/todolist/config"
@@ -38,11 +40,12 @@ type Auth struct {
 }
 
 // Runner is test runner with context
-func Runner(t *testing.T, runTest func(router *gin.Engine)) {
+func Runner(t *testing.T, runTest func(router *gin.Engine, ctx context.Context)) {
 	gin.SetMode(gin.TestMode)
 
 	// read config test file
-	cfg, err := config.LoadConfigFile("../config_test.json")
+	fmt.Println(os.Getenv("TODOLIST_CONF_TEST"))
+	cfg, err := config.LoadConfigFile(os.Getenv("TODOLIST_CONF_TEST"))
 	assert.Nil(t, err)
 
 	// load Context
@@ -62,7 +65,7 @@ func Runner(t *testing.T, runTest func(router *gin.Engine)) {
 	views.Routes(router)
 
 	// execute Test
-	runTest(router)
+	runTest(router, ctx)
 
 	// end test clean bdd
 	require.NoError(t, st.ResetDB(ctx))

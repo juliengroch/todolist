@@ -8,4 +8,4 @@ migrate:
 
 test:
 	@(echo "-> Running unit tests...")
-	@(go test -v ./tests/views/...)
+	@(TODOLIST_CONF_TEST=/home/julien/goWork/src/github.com/juliengroch/todolist/config_test.json go test -v ./tests/views/...)
