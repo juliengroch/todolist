@@ -103,5 +103,5 @@ func CommentUpdateView(c *gin.Context) {
 		failures.HandleError(c, err)
 	}
 
-	c.JSON(http.StatusCreated, tr)
+	c.JSON(http.StatusOK, tr)
 }

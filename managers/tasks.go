@@ -39,6 +39,8 @@ func CreateTask(ctx context.Context, payload *payloads.Task) (*models.Task, erro
 
 	err := store.FromContext(ctx).Create(task)
 
+	task.User = *payload.User
+
 	return task, err
 }
 

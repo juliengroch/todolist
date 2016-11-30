@@ -7,13 +7,12 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-
-	"os"
 
 	"github.com/juliengroch/todolist/application"
 	"github.com/juliengroch/todolist/config"
@@ -44,7 +43,6 @@ func Runner(t *testing.T, runTest func(router *gin.Engine, ctx context.Context))
 	gin.SetMode(gin.TestMode)
 
 	// read config test file
-	fmt.Println(os.Getenv("TODOLIST_CONF_TEST"))
 	cfg, err := config.LoadConfigFile(os.Getenv("TODOLIST_CONF_TEST"))
 	assert.Nil(t, err)
 
@@ -58,7 +56,10 @@ func Runner(t *testing.T, runTest func(router *gin.Engine, ctx context.Context))
 	require.NoError(t, st.Migrate(ctx))
 
 	// init data
-	require.NoError(t, fixtures.InitTestData(ctx))
+	err = fixtures.InitTestData(ctx)
+	if err != nil {
+		cleanBddIfErr(ctx)
+	}
 
 	// start gin router
 	router := server.Router(ctx)
@@ -82,6 +83,11 @@ func POST(router *gin.Engine, req *Request) *httptest.ResponseRecorder {
 	return request(router, "POST", req)
 }
 
+// PATCH make HTTP PATCH request with authentificated user on the uri
+func PATCH(router *gin.Engine, req *Request) *httptest.ResponseRecorder {
+	return request(router, "PATCH", req)
+}
+
 func request(router *gin.Engine, method string, req *Request) *httptest.ResponseRecorder {
 	resp := httptest.NewRecorder()
 	var hreq *http.Request
@@ -101,4 +107,23 @@ func request(router *gin.Engine, method string, req *Request) *httptest.Response
 	router.ServeHTTP(resp, hreq)
 
 	return resp
+}
+
+func cleanBddIfErr(ctx context.Context) {
+	st := store.FromContext(ctx)
+
+	err := st.ResetDB(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	err = st.Migrate(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	err = fixtures.InitTestData(ctx)
+	if err != nil {
+		panic(err)
+	}
 }
