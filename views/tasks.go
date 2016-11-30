@@ -18,13 +18,11 @@ import (
 // TaskListView get all tasks handler
 func TaskListView(c *gin.Context) {
 	taskList, err := managers.FindTasks(c, environment.AuthenticatedUser(c).ID)
-
 	if err != nil {
 		failures.HandleError(c, err)
 	}
 
 	tr, err := resources.NewTasks(taskList)
-
 	if err != nil {
 		failures.HandleError(c, err)
 	}
@@ -40,7 +38,6 @@ func TaskDetailView(c *gin.Context) {
 	tm := c.MustGet(constants.TaskKey).(*models.Task)
 
 	tr, err := resources.NewTask(tm)
-
 	if err != nil {
 		failures.HandleError(c, err)
 	}
@@ -61,14 +58,12 @@ func TaskCreateView(c *gin.Context) {
 	// save task
 	newTask.User = environment.AuthenticatedUser(c)
 	tm, err := managers.CreateTask(c, newTask)
-
 	if err != nil {
 		failures.HandleError(c, err)
 		return
 	}
 
 	tr, err := resources.NewTask(tm)
-
 	if err != nil {
 		failures.HandleError(c, err)
 		return
@@ -90,13 +85,11 @@ func TaskUpdateView(c *gin.Context) {
 
 	// save task
 	tm, err := managers.UpdateTask(c, task, payload)
-
 	if err != nil {
 		failures.HandleError(c, err)
 	}
 
 	tr, err := resources.NewTask(tm)
-
 	if err != nil {
 		failures.HandleError(c, err)
 	}

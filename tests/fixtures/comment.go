@@ -34,11 +34,10 @@ func AddCommentTest(ctx context.Context) error {
 		Modified: time.Now(),
 	}
 
-	err := store.FromContext(ctx).Create(comment)
-
+	err := store.Create(ctx, comment)
 	if err != nil {
 		return err
 	}
 
-	return store.FromContext(ctx).Create(comment2)
+	return store.Create(ctx, comment2)
 }

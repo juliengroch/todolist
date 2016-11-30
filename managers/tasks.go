@@ -15,12 +15,12 @@ import (
 
 // GetTaskByID get one task by id
 func GetTaskByID(ctx context.Context, id string, userID string) (*models.Task, error) {
-	return store.FromContext(ctx).GetTaskByID(id, userID)
+	return store.GetTaskByID(ctx, id, userID)
 }
 
 // FindTasks get all tasks
 func FindTasks(ctx context.Context, userID string) ([]models.Task, error) {
-	return store.FromContext(ctx).FindTasks(userID)
+	return store.FindTasks(ctx, userID)
 }
 
 // CreateTask create a task
@@ -37,7 +37,7 @@ func CreateTask(ctx context.Context, payload *payloads.Task) (*models.Task, erro
 		Modified:    time.Now(),
 	}
 
-	err := store.FromContext(ctx).Create(task)
+	err := store.Create(ctx, task)
 
 	task.User = *payload.User
 
@@ -52,5 +52,5 @@ func UpdateTask(ctx context.Context, task *models.Task, payload *payloads.Task) 
 	task.Priority = payload.Priority
 	task.Modified = time.Now()
 
-	return task, store.FromContext(ctx).Save(task)
+	return task, store.Save(ctx, task)
 }

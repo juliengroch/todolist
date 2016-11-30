@@ -20,7 +20,6 @@ func CommentView(c *gin.Context) {
 	tm := c.MustGet(constants.CommentKey).(*models.Comment)
 
 	tr, err := resources.NewComment(tm)
-
 	if err != nil {
 		failures.HandleError(c, err)
 	}
@@ -32,13 +31,11 @@ func CommentView(c *gin.Context) {
 // CommentView get one Comment handler
 func UserCommentListView(c *gin.Context) {
 	commentList, err := managers.FindComments(c, environment.AuthenticatedUser(c).ID)
-
 	if err != nil {
 		failures.HandleError(c, err)
 	}
 
 	clr, err := resources.NewComments(commentList)
-
 	if err != nil {
 		failures.HandleError(c, err)
 	}
@@ -63,14 +60,12 @@ func CommentCreateView(c *gin.Context) {
 	// save Comment
 	newComment.User = environment.AuthenticatedUser(c)
 	tm, err := managers.CreateComment(c, newComment)
-
 	if err != nil {
 		failures.HandleError(c, err)
 		return
 	}
 
 	tr, err := resources.NewComment(tm)
-
 	if err != nil {
 		failures.HandleError(c, err)
 		return
@@ -92,13 +87,11 @@ func CommentUpdateView(c *gin.Context) {
 
 	// save comment
 	tm, err := managers.UpdateComment(c, comment, payload)
-
 	if err != nil {
 		failures.HandleError(c, err)
 	}
 
 	tr, err := resources.NewComment(tm)
-
 	if err != nil {
 		failures.HandleError(c, err)
 	}

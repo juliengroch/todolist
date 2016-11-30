@@ -15,12 +15,12 @@ import (
 
 // GetCommentByID get one Comment by id
 func GetCommentByID(ctx context.Context, id string, userID string) (*models.Comment, error) {
-	return store.FromContext(ctx).GetCommentByID(id, userID)
+	return store.GetCommentByID(ctx, id, userID)
 }
 
 // FindComments get all tasks
 func FindComments(ctx context.Context, userID string) ([]models.Comment, error) {
-	return store.FromContext(ctx).FindComments(userID)
+	return store.FindComments(ctx, userID)
 }
 
 // CreateComment create a Comment
@@ -36,8 +36,7 @@ func CreateComment(ctx context.Context, payload *payloads.Comment) (*models.Comm
 		Modified: time.Now(),
 	}
 
-	err := store.FromContext(ctx).Create(comment)
-
+	err := store.Create(ctx, comment)
 	if err != nil {
 		return nil, err
 	}
@@ -53,5 +52,5 @@ func UpdateComment(ctx context.Context, comment *models.Comment, payload *payloa
 	comment.Message = payload.Message
 	comment.Modified = time.Now()
 
-	return comment, store.FromContext(ctx).Save(comment)
+	return comment, store.Save(ctx, comment)
 }

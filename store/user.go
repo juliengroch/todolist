@@ -9,7 +9,9 @@ import (
 
 // GetUserByUsernameAndAPIKey returns a User instance for a given username and API Key.
 func GetUserByUsernameAndAPIKey(ctx context.Context, username string, key string) (*models.User, error) {
-	user, err := FromContext(ctx).GetUserByKey(key)
+	user := &models.User{}
+	err := Query(ctx).Where("api_key = ?", key).First(user).Error
+
 	if err != nil {
 		return nil, err
 	}

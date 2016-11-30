@@ -36,7 +36,6 @@ func main() {
 			Flags:   cf,
 			Action: func(c *cli.Context) error {
 				ctx, err := loadAllContext(c)
-
 				if err != nil {
 					return err
 				}
@@ -51,7 +50,6 @@ func main() {
 			Flags:   cf,
 			Action: func(c *cli.Context) error {
 				ctx, err := loadAllContext(c)
-
 				if err != nil {
 					return err
 				}
@@ -66,13 +64,11 @@ func main() {
 
 func loadAllContext(c *cli.Context) (context.Context, error) {
 	cfg, err := config.New(c)
-
 	if err != nil {
 		return nil, err
 	}
 
 	ctx, err := application.Load(cfg)
-
 	if err != nil {
 		return nil, err
 	}

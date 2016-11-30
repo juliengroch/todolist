@@ -23,5 +23,5 @@ func AddTaskTest(ctx context.Context) error {
 		Modified:    time.Now(),
 	}
 
-	return store.FromContext(ctx).Create(task)
+	return store.Create(ctx, task)
 }

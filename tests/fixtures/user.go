@@ -32,11 +32,10 @@ func AddUserTest(ctx context.Context) error {
 		APIKey:   OtherUserAPIKey,
 	}
 
-	err := store.FromContext(ctx).Create(user2)
-
+	err := store.Create(ctx, user)
 	if err != nil {
 		return err
 	}
 
-	return store.FromContext(ctx).Create(user)
+	return store.Create(ctx, user2)
 }

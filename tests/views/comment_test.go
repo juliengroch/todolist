@@ -97,7 +97,7 @@ func TestCommentCreateView(t *testing.T) {
 		assert.Equal(t, fixtures.Username, comment.User.Username)
 
 		// test data in bdd
-		tm, err := store.FromContext(ctx).GetCommentByID(comment.ID, fixtures.UserTestID)
+		tm, err := store.GetCommentByID(ctx, comment.ID, fixtures.UserTestID)
 		assert.Nil(t, err)
 		assert.Equal(t, mess, tm.Message)
 		assert.Equal(t, fixtures.TaskTestID, tm.TaskID)
@@ -138,7 +138,7 @@ func TestCommentUpdateView(t *testing.T) {
 		assert.Equal(t, fixtures.Username, comment.User.Username)
 
 		// test data in bdd
-		tm, err := store.FromContext(ctx).GetCommentByID(comment.ID, fixtures.UserTestID)
+		tm, err := store.GetCommentByID(ctx, comment.ID, fixtures.UserTestID)
 		assert.Nil(t, err)
 		assert.Equal(t, mess, tm.Message)
 		assert.Equal(t, fixtures.TaskTestID, tm.TaskID)
@@ -179,7 +179,7 @@ func TestUpNoOwnerComment(t *testing.T) {
 		assert.Equal(t, fixtures.OtherUserName, comment.User.Username)
 
 		// test data in bdd
-		tm, err := store.FromContext(ctx).GetCommentByID(comment.ID, fixtures.UserTestID)
+		tm, err := store.GetCommentByID(ctx, comment.ID, fixtures.UserTestID)
 		assert.Nil(t, err)
 		assert.Equal(t, mess, tm.Message)
 		assert.Equal(t, fixtures.TaskTestID, tm.TaskID)
