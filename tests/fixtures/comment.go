@@ -11,6 +11,9 @@ import (
 // CommentTestID id of test comment
 const CommentTestID = "789"
 
+// CommentNoOwnerID id of test comment from no owner task user
+const CommentNoOwnerID = "123648289"
+
 // AddCommentTest add a test comment to bdd
 func AddCommentTest(ctx context.Context) error {
 	comment := &models.Comment{
@@ -22,5 +25,20 @@ func AddCommentTest(ctx context.Context) error {
 		Modified: time.Now(),
 	}
 
-	return store.FromContext(ctx).Create(comment)
+	comment2 := &models.Comment{
+		ID:       CommentNoOwnerID,
+		Message:  "comment from other user",
+		UserID:   OtherUserID,
+		TaskID:   TaskTestID,
+		Created:  time.Now(),
+		Modified: time.Now(),
+	}
+
+	err := store.FromContext(ctx).Create(comment)
+
+	if err != nil {
+		return err
+	}
+
+	return store.FromContext(ctx).Create(comment2)
 }

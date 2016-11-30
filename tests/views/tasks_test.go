@@ -102,7 +102,7 @@ func TestTaskCreateView(t *testing.T) {
 		assert.Equal(t, prio, task.Priority)
 
 		assert.NotNil(t, task.User)
-		assert.NotZero(t, task.User.Username)
+		assert.Equal(t, fixtures.Username, task.User.Username)
 
 		// test data in bdd
 		tm, err := store.FromContext(ctx).GetTaskByID(task.ID, fixtures.UserTestID)
@@ -150,7 +150,7 @@ func TestTaskUpdateView(t *testing.T) {
 		assert.Equal(t, prio, task.Priority)
 
 		assert.NotNil(t, task.User)
-		assert.NotZero(t, task.User.Username)
+		assert.Equal(t, fixtures.Username, task.User.Username)
 
 		// test data in bdd
 		tm, err := store.FromContext(ctx).GetTaskByID(task.ID, fixtures.UserTestID)
